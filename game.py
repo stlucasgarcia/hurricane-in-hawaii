@@ -1,4 +1,7 @@
 import pygame
+from scripts.clouds import Clouds
+
+from scripts.utils import load_image, load_images
 
 
 class Game:
@@ -12,10 +15,23 @@ class Game:
         self.display = pygame.Surface((320, 240))
 
         self.clock = pygame.time.Clock()
+        
+        self.assets = {
+            "background": load_image("background.png"),
+            "clouds": load_images("clouds"),
+        }
+        
+        self.clouds = Clouds(self.assets["clouds"], 16)
 
 
     def run(self) -> None:
+
         while True:
+            self.display.blit(self.assets["background"], (0, 0))
+            
+            self.clouds.update()
+            self.clouds.render(self.display)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
