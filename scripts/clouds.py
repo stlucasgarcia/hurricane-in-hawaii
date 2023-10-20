@@ -1,11 +1,18 @@
 from random import choice, random
+
 import pygame
 
 
-class Cloud:
-    def __init__(self, pos: tuple, img, speed, depth) -> None:
+class Cloud(pygame.sprite.Sprite):
+    def __init__(self, pos: tuple, image, speed, depth, groups) -> None:
+        super().__init__(groups)
+
         self.pos = list(pos)
-        self.img = img
+        self.image = image
+        self.rect = self.image.get_rect(topleft=self.pos)
+        self.rect.x = self.pos[0]
+        self.rect.y = self.pos[1]
+
         self.speed = speed
         self.depth = depth
 
@@ -18,35 +25,31 @@ class Cloud:
             self.pos[1] - offset[1] * self.depth,
         )
         surf.blit(
-            self.img,
+            self.image,
             (
-                render_pos[0] % (surf.get_width() + self.img.get_width())
-                - self.img.get_width(),
-                render_pos[1] % (surf.get_height() + self.img.get_height())
-                - self.img.get_height(),
+                render_pos[0] % (surf.get_width() + self.image.get_width())
+                - self.image.get_width(),
+                render_pos[1] % (surf.get_height() + self.image.get_height())
+                - self.image.get_height(),
             ),
         )
 
 
 class Clouds:
-    def __init__(self, cloud_images: list, count: int = 16) -> None:
-        self.clouds = []
+    def __init__(self, cloud_images: list, count: int = 10) -> None:
+        self.clouds = pygame.sprite.Group()
 
         for i in range(count):
-            self.clouds.append(
-                Cloud(
-                    (random() * 99999, random() * 99999),
-                    choice(cloud_images),
-                    random() * 0.05 + 0.05,
-                    random() * 0.6 + 0.2,
-                )
+            Cloud(
+                (random() * 99999, random() * 99999),
+                choice(cloud_images),
+                random() * 0.05 + 0.05,
+                random() * 0.6 + 0.2,
+                self.clouds,
             )
 
-        self.clouds.sort(key=lambda x: x.depth)
-
     def update(self):
-        for cloud in self.clouds:
-            cloud.update()
+        self.clouds.update()
 
     def render(self, surf: pygame.Surface, offset=(0, 0)):
         for cloud in self.clouds:

@@ -6,6 +6,9 @@ from scripts.tilemap import Tilemap
 from scripts.utils import load_image, load_images
 
 
+JUMP_KEYS = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
+
+
 class Game:
     def __init__(self) -> None:
         pygame.init()
@@ -23,7 +26,7 @@ class Game:
             "clouds": load_images("clouds"),
         }
 
-        self.clouds = Clouds(self.assets["clouds"], 16)
+        self.clouds = Clouds(self.assets["clouds"], 10)
 
         self.all_sprites = pygame.sprite.Group()
         self.platforms = pygame.sprite.Group()
@@ -71,11 +74,7 @@ class Game:
                     exit()
 
                 if event.type == pygame.KEYDOWN:
-                    if (
-                        event.key == pygame.K_SPACE
-                        or event.key == pygame.K_UP
-                        or event.key == pygame.K_w
-                    ):
+                    if event.key in JUMP_KEYS:
                         self.player.jump()
 
             self.screen.blit(
