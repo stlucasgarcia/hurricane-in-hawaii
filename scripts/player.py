@@ -6,14 +6,20 @@ GRAVITY = 0.5
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, *groups):
+    def __init__(self, assets, *groups):
         super().__init__(groups)
+        self.assets = assets
         self.image = pygame.image.load("./data/images/player.png")
         self.rect = self.image.get_rect()
         self.rect.x = 100
 
         self.velocity = pygame.Vector2(0, 0)
         self.can_jump = False
+
+        self.action = ""
+        self.anim_offset = (+2, +2)
+        self.flip = False
+        self.set_action("idle")
 
     def update(self, platforms_group: pygame.sprite.Group):
         keys = pygame.key.get_pressed()
@@ -30,6 +36,20 @@ class Player(pygame.sprite.Sprite):
 
         self.rect.y += self.velocity.y
         self.check_collision_y(platforms_group)
+
+        if self.velocity.x > 0:
+            self.flip = False
+            self.set_action("run")
+
+        if self.velocity.x < 0:
+            self.flip = True
+            self.set_action("run")
+
+        if self.velocity.x == 0:
+            self.set_action("idle")
+
+        self.image = pygame.transform.flip(self.animation.img(), self.flip, False)
+        self.animation.update()
 
         self.can_jump = True
 
@@ -55,3 +75,8 @@ class Player(pygame.sprite.Sprite):
         if self.can_jump:
             self.velocity.y = -JUMP_HEIGHT
             self.can_jump = False
+
+    def set_action(self, action: str) -> None:
+        if self.action != action:
+            self.action = action
+            self.animation = self.assets["player/" + action].copy()

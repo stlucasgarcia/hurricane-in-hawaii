@@ -3,7 +3,7 @@ import pygame
 from scripts.clouds import Clouds
 from scripts.player import Player
 from scripts.tilemap import Tilemap
-from scripts.utils import load_image, load_images
+from scripts.utils import Animation, load_image, load_images
 
 
 JUMP_KEYS = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
@@ -24,6 +24,8 @@ class Game:
         self.assets = {
             "background": load_image("background.png"),
             "clouds": load_images("clouds"),
+            "player/idle": Animation(load_images("player/idle"), img_dur=120),
+            "player/run": Animation(load_images("player/run"), img_dur=8),
         }
 
         self.clouds = Clouds(self.assets["clouds"], 10)
@@ -34,7 +36,7 @@ class Game:
         self.tilemap = Tilemap(
             "./data/levels/1.tmx", self.all_sprites, self.platforms
         ).render()
-        self.player = Player(self.all_sprites)
+        self.player = Player(self.assets, self.all_sprites)
         self.scroll = [0, 0]
 
     def run(self) -> None:
@@ -59,11 +61,16 @@ class Game:
             self.all_sprites.update(self.platforms)
 
             for sprite in self.all_sprites:
+                animation_offset = (0, 0)
+
+                if hasattr(sprite, "anim_offset"):
+                    animation_offset = sprite.anim_offset
+
                 self.display.blit(
                     sprite.image,
                     (
-                        sprite.rect.x - render_scroll[0],
-                        sprite.rect.y - render_scroll[1],
+                        sprite.rect.x - render_scroll[0] + animation_offset[0],
+                        sprite.rect.y - render_scroll[1] + animation_offset[1],
                     ),
                 )
 
