@@ -1,14 +1,7 @@
 import pygame
 
-from scripts.clouds import Clouds
-from scripts.player import Player
-from scripts.tilemap import Tilemap
-from scripts.utils import Animation, load_image, load_images
-
-
-JUMP_KEYS = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
-
-TIME_LIMIT = 5 * 60  # 5 minutes in seconds
+from scripts.scene import Scene
+from scripts.utils import Animation, State, load_image, load_images
 
 
 class Game:
@@ -17,7 +10,7 @@ class Game:
 
         pygame.display.set_caption("Py Game")
 
-        self.screen = pygame.display.set_mode((640, 480))
+        self.screen = pygame.display.set_mode((640, 480), pygame.SCALED)
 
         self.display = pygame.Surface((320, 240))
 
@@ -30,53 +23,38 @@ class Game:
             "player/run": Animation(load_images("player/run"), img_dur=8),
         }
 
-        self.clouds = Clouds(self.assets["clouds"], 10)
+        self.scene = Scene(self)
 
-        self.all_sprites = pygame.sprite.Group()
-        self.platforms = pygame.sprite.Group()
+        self.state = State.RUNNING
 
-        self.tilemap = Tilemap(
-            "./data/levels/1.tmx", self.all_sprites, self.platforms
-        ).render()
-        self.player = Player(self.assets, self.all_sprites)
-        self.scroll = [0, 0]
+        self.is_fullscreen = False
 
-        self.start_time = pygame.time.get_ticks()
+    def set_state(self, state: State):
+        if state == State.PAUSED:
+            if self.state == State.RUNNING:
+                self.state = state
+
+            elif self.state == State.PAUSED:
+                self.state = State.RUNNING
+
+    def is_paused(self) -> bool:
+        return self.state == State.PAUSED
+
+    def is_running(self) -> bool:
+        return self.state == State.RUNNING
+
+    def toggle_fullscreen(self):
+        if self.is_fullscreen:
+            pygame.display.set_mode((640, 480), pygame.SCALED)
+            self.is_fullscreen = False
+
+        else:
+            pygame.display.set_mode((640, 480), pygame.FULLSCREEN)
+            self.is_fullscreen = True
 
     def run(self) -> None:
         while True:
             self.display.blit(self.assets["background"], (0, 0))
-
-            # Camera movement
-            self.scroll[0] += (
-                self.player.rect.centerx - self.display.get_width() / 2 - self.scroll[0]
-            ) / 30
-            self.scroll[1] += (
-                self.player.rect.centery
-                - self.display.get_height() / 2
-                - self.scroll[1]
-            ) / 30
-            render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
-
-            # Sprites
-            self.clouds.update()
-            self.clouds.render(self.display, offset=render_scroll)
-
-            self.all_sprites.update(self.platforms)
-
-            for sprite in self.all_sprites:
-                animation_offset = (0, 0)
-
-                if hasattr(sprite, "anim_offset"):
-                    animation_offset = sprite.anim_offset
-
-                self.display.blit(
-                    sprite.image,
-                    (
-                        sprite.rect.x - render_scroll[0] + animation_offset[0],
-                        sprite.rect.y - render_scroll[1] + animation_offset[1],
-                    ),
-                )
 
             # Player inputs
             for event in pygame.event.get():
@@ -84,18 +62,9 @@ class Game:
                     pygame.quit()
                     exit()
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key in JUMP_KEYS:
-                        self.player.jump()
+                self.scene.handle_events(event)
 
-            elapsed_time = (
-                pygame.time.get_ticks() - self.start_time
-            ) // 1000  # Convert to seconds
-
-            if elapsed_time >= TIME_LIMIT:
-                print("Time's up! Game over.")
-                pygame.quit()
-                exit()
+            self.scene.update()
 
             self.screen.blit(
                 pygame.transform.scale(self.display, self.screen.get_size()), (0, 0)

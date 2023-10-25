@@ -1,6 +1,8 @@
 import pygame
 import os
 
+from enum import Enum
+
 BASE_IMG_PATH = "data/images/"
 
 
@@ -15,6 +17,10 @@ def load_images(path: str) -> list[pygame.Surface]:
         load_image(path + "/" + img_name)
         for img_name in sorted(os.listdir(BASE_IMG_PATH + path))
     ]
+
+
+def load_font(size: int) -> pygame.font.Font:
+    return pygame.font.Font("./data/fonts/Silver.ttf", size)
 
 
 class Animation:
@@ -39,3 +45,11 @@ class Animation:
 
     def img(self):
         return self.images[int(self.frame / self.img_duration)]
+
+
+class State(str, Enum):
+    START = "start"
+    PAUSED = "paused"
+    RUNNING = "running"
+    GAME_OVER = "game_over"
+    LEADERBOARD = "leaderboard"
