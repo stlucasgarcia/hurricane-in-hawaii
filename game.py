@@ -8,6 +8,8 @@ from scripts.utils import Animation, load_image, load_images
 
 JUMP_KEYS = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 
+TIME_LIMIT = 5 * 60  # 5 minutes in seconds
+
 
 class Game:
     def __init__(self) -> None:
@@ -38,6 +40,8 @@ class Game:
         ).render()
         self.player = Player(self.assets, self.all_sprites)
         self.scroll = [0, 0]
+
+        self.start_time = pygame.time.get_ticks()
 
     def run(self) -> None:
         while True:
@@ -83,6 +87,15 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key in JUMP_KEYS:
                         self.player.jump()
+
+            elapsed_time = (
+                pygame.time.get_ticks() - self.start_time
+            ) // 1000  # Convert to seconds
+
+            if elapsed_time >= TIME_LIMIT:
+                print("Time's up! Game over.")
+                pygame.quit()
+                exit()
 
             self.screen.blit(
                 pygame.transform.scale(self.display, self.screen.get_size()), (0, 0)
