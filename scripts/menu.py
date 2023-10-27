@@ -1,8 +1,9 @@
 import pygame
 
-from scripts.utils import load_font
+from scripts.utils import State, load_font
 
-SILVER = (128, 128, 128, 220)  # Silver color with alpha for transparency
+SILVER = (128, 128, 128, 220)
+LIGHT_SILVER = (192, 192, 192, 220)
 
 
 class Menu:
@@ -67,7 +68,7 @@ class PauseMenu(Menu):
         self.display.blit(pause_menu_controls_text, (self.display_width // 2 + 50, 90))
 
     def handle_events(self, event: pygame.event.Event) -> None:
-        if not self.scene.game.is_paused():
+        if not self.game.is_paused():
             return
 
         if event.type == pygame.KEYDOWN:
@@ -78,3 +79,46 @@ class PauseMenu(Menu):
                 exit()
             if event.key == pygame.K_f:
                 self.game.toggle_fullscreen()
+
+
+class StartMenu(Menu):
+    def __init__(self, game) -> None:
+        super().__init__(game)
+
+        self.title_font = load_font(48)
+        self.show_subtitle = True
+
+        self.font_fade = pygame.USEREVENT + 1
+        pygame.time.set_timer(self.font_fade, 800)
+
+    def render(self, show: bool = False) -> None:
+        if not show:
+            return
+
+        menu_text = self.title_font.render("Earthquake in Hawaii ", True, (0, 0, 0))
+        subtitle_text = self.font.render("Press space to start", True, (0, 0, 0))
+
+        # Draw a silver filter
+        silver_filter = pygame.Surface(
+            (self.display_width, self.display_height),
+            pygame.SRCALPHA,
+        )
+        silver_filter.fill(LIGHT_SILVER)
+        self.display.blit(silver_filter, (0, 0))
+
+        self.display.blit(menu_text, (self.display_width // 2 - 140, 15))
+
+        # make it blink
+        if self.show_subtitle:
+            self.display.blit(subtitle_text, (self.display_width // 2 - 115, 180))
+
+    def handle_events(self, event: pygame.event.Event) -> None:
+        if not self.game.is_start():
+            return
+
+        if event.type == self.font_fade:
+            self.show_subtitle = not self.show_subtitle
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                self.game.set_state(State.RUNNING)

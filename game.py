@@ -11,6 +11,7 @@ class Game:
         pygame.display.set_caption("Py Game")
 
         self.screen = pygame.display.set_mode((640, 480), pygame.SCALED)
+        self.is_fullscreen = False
 
         self.display = pygame.Surface((320, 240))
 
@@ -25,9 +26,7 @@ class Game:
 
         self.scene = Scene(self)
 
-        self.state = State.RUNNING
-
-        self.is_fullscreen = False
+        self.state = State.START
 
     def set_state(self, state: State):
         if state == State.PAUSED:
@@ -37,11 +36,17 @@ class Game:
             elif self.state == State.PAUSED:
                 self.state = State.RUNNING
 
+        else:
+            self.state = state
+
     def is_paused(self) -> bool:
         return self.state == State.PAUSED
 
     def is_running(self) -> bool:
         return self.state == State.RUNNING
+
+    def is_start(self) -> bool:
+        return self.state == State.START
 
     def toggle_fullscreen(self):
         if self.is_fullscreen:
