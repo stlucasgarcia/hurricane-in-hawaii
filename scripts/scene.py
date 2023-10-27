@@ -33,11 +33,15 @@ class Scene:
         if self.game.is_running():
             self.current_level.handle_events(event)
 
-        self.pause_menu.handle_events(event)
-        self.start_menu.handle_events(event)
+        if self.game.is_paused():
+            self.pause_menu.handle_events(event)
+
+        if self.game.is_start():
+            self.start_menu.handle_events(event)
 
     def update(self):
-        self.current_level.update()
+        if self.game.is_running():
+            self.current_level.update()
 
         self.pause_menu.render(self.game.is_paused())
         self.start_menu.render(self.game.is_start())

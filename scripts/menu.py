@@ -46,7 +46,7 @@ class PauseMenu(Menu):
             "Menu Controls:", True, (0, 0, 0)
         )
         pause_menu_controls_text = self.controls_font.render(
-            "r - Restart level\nspace - Go to start\nq - Quit the game\nf - Fullscreen",  # noqa: E501
+            "r - Restart level\ni - Go to start\nq - Quit the game\nf - Fullscreen",  # noqa: E501
             True,
             (0, 0, 0),
         )
@@ -79,6 +79,8 @@ class PauseMenu(Menu):
                 exit()
             if event.key == pygame.K_f:
                 self.game.toggle_fullscreen()
+            if event.key == pygame.K_i:
+                self.game.set_state(State.START)
 
 
 class StartMenu(Menu):

@@ -36,6 +36,10 @@ class Game:
             elif self.state == State.PAUSED:
                 self.state = State.RUNNING
 
+        elif state == State.START:
+            self.scene = Scene(self)
+            self.state = state
+
         else:
             self.state = state
 
