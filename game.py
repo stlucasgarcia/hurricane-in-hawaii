@@ -22,6 +22,7 @@ class Game:
             "clouds": load_images("clouds"),
             "player/idle": Animation(load_images("player/idle"), img_dur=120),
             "player/run": Animation(load_images("player/run"), img_dur=8),
+            "player/jump": Animation(load_images("player/jump"), img_dur=1),
         }
 
         self.scene = Scene(self)

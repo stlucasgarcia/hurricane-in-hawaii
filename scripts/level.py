@@ -3,6 +3,7 @@ import pygame
 from scripts.clouds import Clouds
 from scripts.player import Player
 from scripts.tilemap import Tilemap
+from scripts.utils import State, load_font
 
 TIME_LIMIT = 5 * 60  # 5 minutes in seconds
 JUMP_KEYS = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
@@ -11,6 +12,8 @@ JUMP_KEYS = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 class Level1:
     def __init__(self, game) -> None:
         self.game = game
+
+        self.font = load_font(24)
 
         self.all_sprites = pygame.sprite.Group()
         self.platforms = pygame.sprite.Group()
@@ -69,7 +72,13 @@ class Level1:
             pygame.time.get_ticks() - self.start_time
         ) // 1000  # Convert to seconds
 
+        elapsed_time_text = self.font.render(
+            f"{TIME_LIMIT - elapsed_time}",
+            (0, 0),
+            (0, 0, 0),
+        )
+
+        self.game.display.blit(elapsed_time_text, (145, 5))
+
         if elapsed_time >= TIME_LIMIT:
-            print("Time's up! Game over.")
-            pygame.quit()
-            exit()
+            self.game.set_state(State.GAME_OVER)

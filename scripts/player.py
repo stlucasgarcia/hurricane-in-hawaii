@@ -84,6 +84,7 @@ class Player(pygame.sprite.Sprite):
         if self.can_jump:
             self.velocity.y = -JUMP_HEIGHT
             self.can_jump = False
+            self.set_action("jump")
 
     def set_action(self, action: str) -> None:
         if self.action != action:
