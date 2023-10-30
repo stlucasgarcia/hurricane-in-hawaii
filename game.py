@@ -8,7 +8,7 @@ class Game:
     def __init__(self) -> None:
         pygame.init()
 
-        pygame.display.set_caption("Py Game")
+        pygame.display.set_caption("Earthquake in Hawaii")
 
         self.screen = pygame.display.set_mode((640, 480), pygame.SCALED)
         self.is_fullscreen = False
@@ -40,6 +40,9 @@ class Game:
             self.scene = Scene(self)
             self.state = state
 
+        elif state == State.GAME_OVER:
+            self.state = state
+
         else:
             self.state = state
 
@@ -51,6 +54,9 @@ class Game:
 
     def is_start(self) -> bool:
         return self.state == State.START
+
+    def is_game_over(self) -> bool:
+        return self.state == State.GAME_OVER
 
     def toggle_fullscreen(self):
         if self.is_fullscreen:

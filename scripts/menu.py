@@ -68,9 +68,6 @@ class PauseMenu(Menu):
         self.display.blit(pause_menu_controls_text, (self.display_width // 2 + 50, 90))
 
     def handle_events(self, event: pygame.event.Event) -> None:
-        if not self.game.is_paused():
-            return
-
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_r:
                 self.scene.reset()
@@ -115,12 +112,52 @@ class StartMenu(Menu):
             self.display.blit(subtitle_text, (self.display_width // 2 - 115, 180))
 
     def handle_events(self, event: pygame.event.Event) -> None:
-        if not self.game.is_start():
-            return
-
         if event.type == self.font_fade:
             self.show_subtitle = not self.show_subtitle
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 self.game.set_state(State.RUNNING)
+
+
+class GameOverMenu(Menu):
+    def __init__(self, game) -> None:
+        super().__init__(game)
+
+        self.title_font = load_font(50)
+        self.show_subtitle = True
+        self.small_font = load_font(20)
+
+        self.font_fade = pygame.USEREVENT + 1
+        pygame.time.set_timer(self.font_fade, 800)
+
+    def render(self, show: bool = False, points: int = 0) -> None:
+        if not show:
+            return
+
+        menu_text = self.title_font.render("GAME OVER", True, (139, 0, 0))
+        points_text = self.small_font.render(f"{points} points", True, (0, 0, 0))
+        subtitle_text = self.font.render("Press space to restart", True, (0, 0, 0))
+
+        # Draw a silver filter
+        silver_filter = pygame.Surface(
+            (self.display_width, self.display_height),
+            pygame.SRCALPHA,
+        )
+        silver_filter.fill(LIGHT_SILVER)
+        self.display.blit(silver_filter, (0, 0))
+
+        self.display.blit(menu_text, (self.display_width // 2 - 65, 15))
+        self.display.blit(points_text, (self.display_width // 2 - 25, 60))
+
+        # make it blink
+        if self.show_subtitle:
+            self.display.blit(subtitle_text, (self.display_width // 2 - 125, 180))
+
+    def handle_events(self, event: pygame.event.Event) -> None:
+        if event.type == self.font_fade:
+            self.show_subtitle = not self.show_subtitle
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                self.game.set_state(State.START)

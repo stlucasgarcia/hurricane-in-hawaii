@@ -1,13 +1,16 @@
 import pygame
 
+from scripts.utils import State
+
 PLAYER_SPEED = 1
 JUMP_HEIGHT = 7
 GRAVITY = 0.5
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, assets, *groups):
+    def __init__(self, game, assets, *groups):
         super().__init__(groups)
+        self.game = game
         self.assets = assets
         self.image = pygame.image.load("./data/images/player.png")
         self.rect = self.image.get_rect()
@@ -16,9 +19,12 @@ class Player(pygame.sprite.Sprite):
         self.velocity = pygame.Vector2(0, 0)
         self.can_jump = False
 
+        self.is_alive = True
+
         self.action = ""
         self.anim_offset = (+2, +2)
         self.flip = False
+
         self.set_action("idle")
 
     def update(self, platforms_group: pygame.sprite.Group):
@@ -48,10 +54,12 @@ class Player(pygame.sprite.Sprite):
         if self.velocity.x == 0:
             self.set_action("idle")
 
+        if self.velocity.y > 80:
+            self.is_alive = False
+            self.game.set_state(State.GAME_OVER)
+
         self.image = pygame.transform.flip(self.animation.img(), self.flip, False)
         self.animation.update()
-
-        self.can_jump = True
 
     def check_collision_x(self, platforms_group: pygame.sprite.Group):
         hits = pygame.sprite.spritecollide(self, platforms_group, False)
@@ -67,6 +75,7 @@ class Player(pygame.sprite.Sprite):
             if self.velocity.y > 0:
                 self.rect.bottom = hit.rect.top
                 self.velocity.y = 0
+                self.can_jump = True
             elif self.velocity.y < 0:
                 self.rect.top = hit.rect.bottom
                 self.velocity.y = 0

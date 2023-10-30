@@ -20,7 +20,7 @@ class Level1:
         self.tilemap = Tilemap(
             "./data/levels/1.tmx", self.all_sprites, self.platforms
         ).render()
-        self.player = Player(self.game.assets, self.all_sprites)
+        self.player = Player(self.game, self.game.assets, self.all_sprites)
         self.scroll = [0, 0]
 
         self.start_time = pygame.time.get_ticks()
