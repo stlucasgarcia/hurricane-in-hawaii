@@ -1,6 +1,7 @@
 import pygame
 
 from scripts.clouds import Clouds
+from scripts.helper import Helper1
 from scripts.player import Player
 from scripts.tilemap import Tilemap
 from scripts.utils import State, load_font
@@ -17,6 +18,7 @@ class Level1:
 
         self.all_sprites = pygame.sprite.Group()
         self.platforms = pygame.sprite.Group()
+        self.helpers = pygame.sprite.Group()
 
         self.clouds = Clouds(self.game.assets["clouds"], 10)
 
@@ -27,6 +29,7 @@ class Level1:
         self.scroll = [0, 0]
 
         self.start_time = pygame.time.get_ticks()
+        self.helper = Helper1(self.game, self.game.assets, self.helpers)
 
     def handle_events(self, event: pygame.event.Event):
         if event.type == pygame.KEYDOWN:
@@ -74,11 +77,13 @@ class Level1:
 
         elapsed_time_text = self.font.render(
             f"{TIME_LIMIT - elapsed_time}",
-            (0, 0),
+            False,
             (0, 0, 0),
         )
 
         self.game.display.blit(elapsed_time_text, (145, 5))
+
+        self.helper.update(self.platforms)
 
         if elapsed_time >= TIME_LIMIT:
             self.game.set_state(State.GAME_OVER)

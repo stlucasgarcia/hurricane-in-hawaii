@@ -8,7 +8,7 @@ class Game:
     def __init__(self) -> None:
         pygame.init()
 
-        pygame.display.set_caption("Earthquake in Hawaii")
+        pygame.display.set_caption("Terremoto no Havaí")
 
         self.screen = pygame.display.set_mode((640, 480), pygame.SCALED)
         self.is_fullscreen = False

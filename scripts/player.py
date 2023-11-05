@@ -12,7 +12,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(groups)
         self.game = game
         self.assets = assets
-        self.image = pygame.image.load("./data/images/player.png")
+        self.image = pygame.image.load("./data/images/player/player.png")
         self.rect = self.image.get_rect()
         self.rect.x = 100
 

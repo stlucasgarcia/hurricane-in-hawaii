@@ -31,23 +31,23 @@ class PauseMenu(Menu):
         if not show:
             return
 
-        menu_text = self.font.render("Paused", True, (0, 0, 0))
+        menu_text = self.font.render("Pause", False, (0, 0, 0))
 
         game_menu_controls = self.subtitle_font.render(
-            "Game Controls:", True, (0, 0, 0)
+            "Controle jogo:", False, (0, 0, 0)
         )
         game_menu_controls_text = self.controls_font.render(
-            "left arrow / a - Move left\nright arrow / d - Move right\nup arrow / space - Jump\nesc - Pause the game",  # noqa: E501
-            True,
+            "seta esquerda / a - Movimentar esquerda\nseta direita / d - Movimentar direita\nseta cima / space - Pular\nesc - Pausar o jogo",  # noqa: E501
+            False,
             (0, 0, 0),
         )
 
         pause_menu_controls = self.subtitle_font.render(
-            "Menu Controls:", True, (0, 0, 0)
+            "Controle pause:", False, (0, 0, 0)
         )
         pause_menu_controls_text = self.controls_font.render(
-            "r - Restart level\ni - Go to start\nq - Quit the game\nf - Fullscreen",  # noqa: E501
-            True,
+            "r - Reiniciar o nível\ni - Ir para o início\nq - Sair do jogo\nf - Tela cheia",  # noqa: E501
+            False,
             (0, 0, 0),
         )
 
@@ -94,8 +94,8 @@ class StartMenu(Menu):
         if not show:
             return
 
-        menu_text = self.title_font.render("Earthquake in Hawaii ", True, (0, 0, 0))
-        subtitle_text = self.font.render("Press space to start", True, (0, 0, 0))
+        menu_text = self.title_font.render("Terremoto no Havaí", False, (0, 0, 0))
+        subtitle_text = self.font.render("Press space to start", False, (0, 0, 0))
 
         # Draw a silver filter
         silver_filter = pygame.Surface(
@@ -105,7 +105,7 @@ class StartMenu(Menu):
         silver_filter.fill(LIGHT_SILVER)
         self.display.blit(silver_filter, (0, 0))
 
-        self.display.blit(menu_text, (self.display_width // 2 - 140, 15))
+        self.display.blit(menu_text, (self.display_width // 2 - 132, 15))
 
         # make it blink
         if self.show_subtitle:
@@ -135,9 +135,9 @@ class GameOverMenu(Menu):
         if not show:
             return
 
-        menu_text = self.title_font.render("GAME OVER", True, (139, 0, 0))
-        points_text = self.small_font.render(f"{points} points", True, (0, 0, 0))
-        subtitle_text = self.font.render("Press space to restart", True, (0, 0, 0))
+        menu_text = self.title_font.render("GAME OVER", False, (139, 0, 0))
+        points_text = self.small_font.render(f"{points} points", False, (0, 0, 0))
+        subtitle_text = self.font.render("Press space to restart", False, (0, 0, 0))
 
         # Draw a silver filter
         silver_filter = pygame.Surface(
