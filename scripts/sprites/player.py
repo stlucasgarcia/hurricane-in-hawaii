@@ -28,6 +28,7 @@ class Player(pygame.sprite.Sprite):
 
         self.game.channels["player_run"].set_volume(0.1)
         self.game.channels["player_run"].play(self.sounds["player/run"], loops=-1)
+        self.game.channels["player_run"].pause()
 
         self.set_action("idle")
 

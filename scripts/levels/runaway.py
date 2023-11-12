@@ -65,9 +65,10 @@ class RunawayLevel:
         self.start_time = pygame.time.get_ticks()
         self.helper = LevelHelper(self.game, self.game.assets, self.helpers)
         self.points = 0
+        self.is_completed = False
 
-        self.background_music = self.game.sounds["background/runaway"]
-        self.background_music.set_volume(0.1)
+        self.ambient_music = self.game.sounds["ambient/runaway"]
+        self.ambient_music.set_volume(0.1)
 
     def handle_events(self, event: pygame.event.Event):
         if event.type == pygame.KEYDOWN:

@@ -106,7 +106,7 @@ class PauseMenu(Menu):
                 self.play_menu_select_sound()
                 self.game.set_state(State.START)
             if event.key == pygame.K_s:
-                self.game.sound_enabled = not self.game.sound_enabled
+                self.game.toggle_sound_enabled()
 
 
 class StartMenu(Menu):

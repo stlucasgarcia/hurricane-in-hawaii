@@ -63,6 +63,7 @@ class State(str, Enum):
 
 class MixerChannels(int, Enum):
     BACKGROUND = 0
-    MENU = 1
-    PLAYER = 2
-    PLAYER_RUN = 3
+    AMBIENT = 1
+    MENU = 2
+    PLAYER = 3
+    PLAYER_RUN = 4
