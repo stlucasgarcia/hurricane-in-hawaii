@@ -1,10 +1,10 @@
 import pygame
 
-from scripts.clouds import Clouds
-from scripts.helper import Helper
-from scripts.player import Player
-from scripts.tilemap import Tilemap
-from scripts.utils import State, load_font
+from scripts.sprites.clouds import Clouds
+from scripts.sprites.helper import Helper
+from scripts.sprites.player import Player
+from scripts.common.tilemap import Tilemap
+from scripts.common.utils import State, load_font
 
 TIME_LIMIT = 3 * 60  # 5 minutes in seconds
 JUMP_KEYS = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
@@ -43,7 +43,7 @@ class LevelHelper(Helper):
         )
 
 
-class Level1:
+class RunawayLevel:
     def __init__(self, game) -> None:
         self.game = game
 

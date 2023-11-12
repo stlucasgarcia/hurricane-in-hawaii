@@ -1,7 +1,7 @@
 import pygame
 
-from scripts.scene import Scene
-from scripts.utils import Animation, State, load_image, load_images
+from scripts.common.scene import Scene
+from scripts.common.utils import Animation, State, load_image, load_images
 
 
 class Game:

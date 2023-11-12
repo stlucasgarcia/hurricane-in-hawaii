@@ -1,9 +1,9 @@
 import pygame
 
-from scripts.level import Level1
-from scripts.menu import GameOverMenu, PauseMenu, StartMenu
+from scripts.levels.runaway import RunawayLevel
+from scripts.ui.menu import GameOverMenu, PauseMenu, StartMenu
 
-from scripts.utils import State
+from scripts.common.utils import State
 
 
 class Scene:
@@ -15,7 +15,7 @@ class Scene:
         self.game_over_menu = GameOverMenu(game)
 
         self.levels = {
-            "level_1": Level1(self.game),
+            "level_1": RunawayLevel(self.game),
             "level_2": "Level 2",
             "level_3": "Level 3",
         }
@@ -26,7 +26,7 @@ class Scene:
 
     def create_level(self, level_name: str):
         if level_name == "level_1":
-            return Level1(self.game)
+            return RunawayLevel(self.game)
 
     def handle_events(self, event: pygame.event.Event):
         if event.type == pygame.KEYDOWN:

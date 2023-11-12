@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.utils import State
+from scripts.common.utils import State
 
 PLAYER_SPEED = 1
 JUMP_HEIGHT = 7

@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.utils import load_font
+from scripts.common.utils import load_font
 
 
 class Helper(pygame.sprite.Sprite):

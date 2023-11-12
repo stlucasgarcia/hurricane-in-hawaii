@@ -1,7 +1,7 @@
 import pygame
 
 from pytmx.util_pygame import load_pygame
-from scripts.tile import Tile
+from scripts.common.tile import Tile
 
 
 class Tilemap:

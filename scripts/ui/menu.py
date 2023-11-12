@@ -1,6 +1,6 @@
 import pygame
 
-from scripts.utils import State, load_font
+from scripts.common.utils import State, load_font
 
 SILVER = (128, 128, 128, 220)
 LIGHT_SILVER = (192, 192, 192, 220)
