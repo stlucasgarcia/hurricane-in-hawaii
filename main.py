@@ -57,14 +57,20 @@ class Game:
 
         self.state = State.START
 
+    def play_state_sound(self, sound_name: str):
+        if not self.sound_enabled:
+            return
+
+        self.channels["menu"].play(self.sounds[f"ui/{sound_name}"])
+
     def set_state(self, state: State):
         if state == State.PAUSED:
             if self.state == State.RUNNING:
-                self.channels["menu"].play(self.sounds["ui/menu_in"])
+                self.play_state_sound("menu_in")
                 self.state = state
 
             elif self.state == State.PAUSED:
-                self.channels["menu"].play(self.sounds["ui/menu_out"])
+                self.play_state_sound("menu_out")
                 self.state = State.RUNNING
 
         elif state == State.START:
@@ -72,7 +78,7 @@ class Game:
             self.state = state
 
         elif state == State.GAME_OVER:
-            self.channels["menu"].play(self.sounds["ui/game_over"])
+            self.play_state_sound("game_over")
             self.state = state
 
         else:
