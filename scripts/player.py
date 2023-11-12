@@ -27,7 +27,11 @@ class Player(pygame.sprite.Sprite):
 
         self.set_action("idle")
 
-    def update(self, platforms_group: pygame.sprite.Group):
+    def update(
+        self,
+        platforms_group: pygame.sprite.Group,
+        next_level_group: pygame.sprite.Group,
+    ):
         keys = pygame.key.get_pressed()
         self.velocity.x = 0
 
@@ -38,10 +42,10 @@ class Player(pygame.sprite.Sprite):
 
         self.velocity.y += GRAVITY
         self.rect.x += self.velocity.x
-        self.check_collision_x(platforms_group)
+        self.check_collision_x(platforms_group, next_level_group)
 
         self.rect.y += self.velocity.y
-        self.check_collision_y(platforms_group)
+        self.check_collision_y(platforms_group, next_level_group)
 
         if self.velocity.x > 0:
             self.flip = False
@@ -61,7 +65,11 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.flip(self.animation.img(), self.flip, False)
         self.animation.update()
 
-    def check_collision_x(self, platforms_group: pygame.sprite.Group):
+    def check_collision_x(
+        self,
+        platforms_group: pygame.sprite.Group,
+        next_level_group: pygame.sprite.Group,
+    ):
         hits = pygame.sprite.spritecollide(self, platforms_group, False)
         for hit in hits:
             if self.velocity.x > 0:
@@ -69,7 +77,16 @@ class Player(pygame.sprite.Sprite):
             elif self.velocity.x < 0:
                 self.rect.left = hit.rect.right
 
-    def check_collision_y(self, platforms_group: pygame.sprite.Group):
+        hits = pygame.sprite.spritecollide(self, next_level_group, False)
+        for hit in hits:
+            if self.velocity.x != 0:
+                self.game.set_state(State.NEXT_LEVEL)
+
+    def check_collision_y(
+        self,
+        platforms_group: pygame.sprite.Group,
+        next_level_group: pygame.sprite.Group,
+    ):
         hits = pygame.sprite.spritecollide(self, platforms_group, False)
         for hit in hits:
             if self.velocity.y > 0:
@@ -79,6 +96,11 @@ class Player(pygame.sprite.Sprite):
             elif self.velocity.y < 0:
                 self.rect.top = hit.rect.bottom
                 self.velocity.y = 0
+
+        hits = pygame.sprite.spritecollide(self, next_level_group, False)
+        for hit in hits:
+            if self.velocity.y != 0:
+                self.game.set_state(State.NEXT_LEVEL)
 
     def jump(self):
         if self.can_jump:
