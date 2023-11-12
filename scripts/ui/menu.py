@@ -1,4 +1,5 @@
 import pygame
+from random import randint
 
 from scripts.common.utils import State, load_font
 
@@ -12,11 +13,33 @@ class Menu:
         self.display_width = game.display.get_width()
         self.display_height = game.display.get_height()
         self.display = game.display
+        self.sounds = game.sounds
+
+        self.channel = game.channels["menu"]
+        self.channel.set_volume(0.2)
 
         self.font = load_font(36)
 
     def render(self, show: bool = False) -> None:
         raise NotImplementedError
+
+    def play_menu_select_sound(self, variant: int = None) -> None:
+        if not self.game.sound_enabled:
+            return
+
+        if not variant:
+            variant = randint(0, 1)
+
+        if variant == 0:
+            self.channel.play(self.sounds["ui/select"])
+        else:
+            self.channel.play(self.sounds["ui/select_alternative"])
+
+    def play_game_over_sound(self) -> None:
+        if not self.game.sound_enabled:
+            return
+
+        self.channel.play(self.sounds["ui/game_over"])
 
 
 class PauseMenu(Menu):
@@ -46,7 +69,7 @@ class PauseMenu(Menu):
             "Controle pause:", False, (0, 0, 0)
         )
         pause_menu_controls_text = self.controls_font.render(
-            "r - Reiniciar o nível\ni - Ir para o início\nq - Sair do jogo\nf - Tela cheia",  # noqa: E501
+            "r - Reiniciar o nível\ni - Ir para o início\nq - Sair do jogo\nf - Tela cheia\ns - Tirar o som",  # noqa: E501
             False,
             (0, 0, 0),
         )
@@ -70,14 +93,20 @@ class PauseMenu(Menu):
     def handle_events(self, event: pygame.event.Event) -> None:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_r:
+                self.play_menu_select_sound()
                 self.scene.reset()
             if event.key == pygame.K_q:
+                self.play_game_over_sound()
                 pygame.quit()
                 exit()
             if event.key == pygame.K_f:
+                self.play_menu_select_sound()
                 self.game.toggle_fullscreen()
             if event.key == pygame.K_i:
+                self.play_menu_select_sound()
                 self.game.set_state(State.START)
+            if event.key == pygame.K_s:
+                self.game.sound_enabled = not self.game.sound_enabled
 
 
 class StartMenu(Menu):
@@ -117,6 +146,7 @@ class StartMenu(Menu):
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
+                self.play_menu_select_sound()
                 self.game.set_state(State.RUNNING)
 
 
@@ -160,4 +190,5 @@ class GameOverMenu(Menu):
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
+                self.play_menu_select_sound()
                 self.game.set_state(State.START)

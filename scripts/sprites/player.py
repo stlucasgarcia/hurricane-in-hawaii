@@ -15,6 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load("./data/images/player/player.png")
         self.rect = self.image.get_rect()
         self.rect.x = 100
+        self.sounds = game.sounds
 
         self.velocity = pygame.Vector2(0, 0)
         self.can_jump = False
@@ -24,6 +25,9 @@ class Player(pygame.sprite.Sprite):
         self.action = ""
         self.anim_offset = (+2, +2)
         self.flip = False
+
+        self.game.channels["player_run"].set_volume(0.1)
+        self.game.channels["player_run"].play(self.sounds["player/run"], loops=-1)
 
         self.set_action("idle")
 
@@ -112,3 +116,15 @@ class Player(pygame.sprite.Sprite):
         if self.action != action:
             self.action = action
             self.animation = self.assets["player/" + action].copy()
+
+            if self.game.sound_enabled:
+                sound = self.sounds.get("player/" + action)
+
+                if action == "jump":
+                    self.game.channels["player_run"].pause()
+                    self.game.channels["player"].play(sound)
+                    self.game.channels["player"].set_volume(0.2)
+                elif action == "run":
+                    self.game.channels["player_run"].unpause()
+                elif action == "idle":
+                    self.game.channels["player_run"].pause()

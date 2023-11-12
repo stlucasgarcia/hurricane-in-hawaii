@@ -4,6 +4,7 @@ import os
 from enum import Enum
 
 BASE_IMG_PATH = "data/images/"
+BASE_SOUND_PATH = "data/audio/"
 
 
 def load_image(path: str) -> pygame.Surface:
@@ -21,6 +22,10 @@ def load_images(path: str) -> list[pygame.Surface]:
 
 def load_font(size: int) -> pygame.font.Font:
     return pygame.font.Font("./data/fonts/Silver.ttf", size)
+
+
+def load_sound(path: str) -> pygame.mixer.Sound:
+    return pygame.mixer.Sound(BASE_SOUND_PATH + path)
 
 
 class Animation:
@@ -54,3 +59,10 @@ class State(str, Enum):
     NEXT_LEVEL = "next_level"
     GAME_OVER = "game_over"
     LEADERBOARD = "leaderboard"
+
+
+class MixerChannels(int, Enum):
+    BACKGROUND = 0
+    MENU = 1
+    PLAYER = 2
+    PLAYER_RUN = 3

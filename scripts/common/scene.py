@@ -21,6 +21,7 @@ class Scene:
         }
 
         self.current_level = self.levels["level_1"]
+        self.channel = game.channels["background"]
 
         self.is_alive = True
 
@@ -45,9 +46,20 @@ class Scene:
         if self.game.is_game_over():
             self.game_over_menu.handle_events(event)
 
+    def play_background_music(self):
+        if not self.game.sound_enabled:
+            return
+
+        if not self.channel.get_busy():
+            self.channel.play(self.current_level.background_music)
+
     def update(self):
         if self.game.is_running():
             self.current_level.update()
+            self.play_background_music()
+
+        else:
+            self.channel.stop()
 
         self.pause_menu.render(self.game.is_paused())
         self.start_menu.render(self.game.is_start())
