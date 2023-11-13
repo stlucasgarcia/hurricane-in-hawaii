@@ -8,7 +8,7 @@ GRAVITY = 0.5
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, game, assets, *groups):
+    def __init__(self, game, assets, *groups, **kwargs):
         super().__init__(groups)
         self.game = game
         self.assets = assets
@@ -16,6 +16,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 100
         self.sounds = game.sounds
+        self.player_speed = kwargs.get("player_speed", PLAYER_SPEED)
 
         self.velocity = pygame.Vector2(0, 0)
         self.can_jump = False
@@ -40,9 +41,9 @@ class Player(pygame.sprite.Sprite):
         self.velocity.x = 0
 
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.velocity.x = -PLAYER_SPEED
+            self.velocity.x = -self.player_speed
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.velocity.x = PLAYER_SPEED
+            self.velocity.x = self.player_speed
 
         self.velocity.y += GRAVITY
         self.rect.x += self.velocity.x
