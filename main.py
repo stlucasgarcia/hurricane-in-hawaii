@@ -5,9 +5,11 @@ from scripts.common.utils import (
     Animation,
     MixerChannels,
     State,
+    load_data,
     load_image,
     load_images,
     load_sound,
+    save_data,
 )
 
 
@@ -71,6 +73,12 @@ class Game:
             self.sounds["background/presentation"], loops=-1
         )
 
+        self.leaderboard = load_data()
+        self.player_data = {
+            "name": "",
+            "score": 0,
+        }
+
         self.scene = Scene(self)
 
         self.state = State.START
@@ -80,6 +88,23 @@ class Game:
             return
 
         channel.play(self.sounds[sound_name])
+
+    def update_leaderboard(self):
+        has_updated = False
+
+        self.player_data["score"] = self.scene.get_points()
+
+        for item in self.leaderboard["players"]:
+            if item["name"] == self.player_data["name"]:
+                item["score"] = self.player_data["score"]
+                has_updated = True
+                break
+
+        if not has_updated:
+            self.leaderboard["players"].append(self.player_data)
+
+        print(self.leaderboard)
+        save_data(self.leaderboard)
 
     def set_state(self, state: State):
         if state == State.PAUSED:
@@ -101,6 +126,7 @@ class Game:
             )
 
         elif state == State.GAME_OVER:
+            self.update_leaderboard()
             self.channels["menu"].set_volume(1)
             self.play_state_sound(self.channels["menu"], "ui/game_over")
             self.state = state
@@ -110,8 +136,23 @@ class Game:
             self.play_state_sound(self.channels["background"], "background/game")
 
         elif state == State.NEXT_LEVEL:
+            if self.scene.current_level.name == "final":
+                self.scene.current_level.is_completed = True
+                self.scene.current_level.points += 500
+                self.set_state(State.LEADERBOARD)
+                return
+
             self.scene.next_level()
             self.state = State.RUNNING
+
+        elif state == State.LEADERBOARD:
+            self.update_leaderboard()
+            self.channels["player_run"].pause()
+            self.channels["enemy_run"].pause()
+            self.play_state_sound(
+                self.channels["background"], "background/presentation"
+            )
+            self.state = State.LEADERBOARD
 
         else:
             self.state = state
@@ -138,6 +179,9 @@ class Game:
 
     def is_game_over(self) -> bool:
         return self.state == State.GAME_OVER
+
+    def is_leaderboard(self) -> bool:
+        return self.state == State.LEADERBOARD
 
     def toggle_fullscreen(self):
         if self.is_fullscreen:

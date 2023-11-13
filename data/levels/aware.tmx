@@ -23,7 +23,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="2" name="decoration">
+ <objectgroup id="2" name="decoration" locked="1">
   <object id="1" gid="145" x="1232" y="176" width="16" height="32"/>
   <object id="2" gid="91" x="1200" y="176" width="16" height="16"/>
   <object id="3" gid="76" x="1248" y="176" width="16" height="16"/>
@@ -71,6 +71,5 @@
   <object id="47" gid="148" x="640" y="96" width="48" height="48"/>
   <object id="48" gid="147" x="288" y="112" width="48" height="64"/>
   <object id="49" gid="151" x="80" y="128" width="16" height="16"/>
-  <object id="50" gid="145" x="48" y="176" width="16" height="32"/>
  </objectgroup>
 </map>

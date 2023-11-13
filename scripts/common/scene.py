@@ -4,7 +4,7 @@ from scripts.levels.aware import AwareLevel
 from scripts.levels.final import FinalLevel
 
 from scripts.levels.runaway import RunawayLevel
-from scripts.ui.menu import GameOverMenu, PauseMenu, StartMenu
+from scripts.ui.menu import GameOverMenu, LeaderboardMenu, PauseMenu, StartMenu
 
 from scripts.common.utils import State
 
@@ -16,6 +16,7 @@ class Scene:
         self.pause_menu = PauseMenu(game, self)
         self.start_menu = StartMenu(game)
         self.game_over_menu = GameOverMenu(game)
+        self.leaderboard_menu = LeaderboardMenu(game)
 
         self.levels = {
             "runaway": RunawayLevel(self.game),
@@ -50,7 +51,9 @@ class Scene:
         elif self.current_level.name == "aware":
             self.create_level("final")
         elif self.current_level.name == "final":
-            self.game.set_state(State.FINISHED)
+            self.current_level.is_completed = True
+            self.current_level.points += 50000
+            self.game.set_state(State.LEADERBOARD)
 
     def get_points(self):
         points = 0
@@ -78,6 +81,9 @@ class Scene:
         if self.game.is_game_over():
             self.game_over_menu.handle_events(event)
 
+        if self.game.is_leaderboard():
+            self.leaderboard_menu.handle_events(event)
+
     def play_ambient_music(self):
         if not self.game.sound_enabled:
             return
@@ -96,6 +102,7 @@ class Scene:
         self.pause_menu.render(self.game.is_paused())
         self.start_menu.render(self.game.is_start())
         self.game_over_menu.render(self.game.is_game_over(), self.get_points())
+        self.leaderboard_menu.render(self.game.is_leaderboard())
 
     def reset(self):
         self.create_level(self.current_level.name)

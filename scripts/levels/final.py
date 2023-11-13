@@ -7,6 +7,7 @@ from scripts.sprites.helper import FinalHelper
 from scripts.sprites.player import Player
 from scripts.common.tilemap import Tilemap
 from scripts.common.utils import load_font
+from scripts.ui.menu import InstructionFinalMenu
 
 TIME_LIMIT = 3 * 60  # 5 minutes in seconds
 JUMP_KEYS = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
@@ -14,7 +15,7 @@ JUMP_KEYS = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 
 class FinalLevel:
     def __init__(self, game) -> None:
-        self.name = "aware"
+        self.name = "final"
         self.game = game
 
         self.font = load_font(24)
@@ -56,8 +57,11 @@ class FinalLevel:
 
         self.falling_debris_timer = 60
 
+        self.instructions_menu = InstructionFinalMenu(game)
+        self.instructions = True
+
     def generate_debris(self, player_x):
-        self.points += 1
+        self.points += 5
         Debris(
             self.game,
             player_x,
@@ -69,7 +73,18 @@ class FinalLevel:
             if event.key in JUMP_KEYS:
                 self.player.jump()
 
+        if self.instructions:
+            self.instructions_menu.handle_events(event)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.instructions_menu.play_menu_select_sound()
+                    self.instructions = False
+
     def update(self):
+        if self.instructions:
+            self.instructions_menu.render()
+            return
+
         # Camera movement
         self.scroll[0] += (
             self.player.rect.centerx

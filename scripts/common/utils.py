@@ -1,10 +1,12 @@
 import pygame
 import os
+import json
 
 from enum import Enum
 
 BASE_IMG_PATH = "data/images/"
 BASE_SOUND_PATH = "data/audio/"
+DATA_PATH = "data/leaderboard.json"
 
 
 def load_image(path: str) -> pygame.Surface:
@@ -26,6 +28,22 @@ def load_font(size: int) -> pygame.font.Font:
 
 def load_sound(path: str) -> pygame.mixer.Sound:
     return pygame.mixer.Sound(BASE_SOUND_PATH + path)
+
+
+def load_data() -> list[object]:
+    try:
+        with open(DATA_PATH) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        with open(DATA_PATH, "w+") as new_file:
+            default_data = {"players": []}
+            json.dump(default_data, new_file)
+            return default_data
+
+
+def save_data(data: list[object]) -> None:
+    with open(DATA_PATH, "w+") as f:
+        json.dump(data, f)
 
 
 class Animation:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="38">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="39">
  <tileset firstgid="1" source="../tileset/tileset_dirt.tsx"/>
  <tileset firstgid="73" source="../objects/next.tsx"/>
  <tileset firstgid="74" source="../tileset/tileset_forest.tsx"/>
@@ -23,7 +23,7 @@
 0,50,51,51,51,51,51,51,51,51,51,51,51,51,51,52,53,54,52,52,54,53,52,54,51,53,51,51,51,53,54,54,53,51,51,54,54,53,54,54,54,53,53,53,53,51,52,53,54,52,51,53,52,54,51,51,51,52,54,55
 </data>
  </layer>
- <objectgroup id="2" name="objects">
+ <objectgroup id="2" name="objects" locked="1">
   <object id="1" gid="73" x="896" y="144" width="16" height="32"/>
   <object id="2" gid="76" x="816" y="128" width="16" height="16"/>
   <object id="3" gid="76" x="768" y="192" width="16" height="16"/>

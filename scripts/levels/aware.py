@@ -53,7 +53,7 @@ class AwareLevel:
         self.instructions = True
 
     def generate_debris(self, player_x):
-        self.points += 1
+        self.points += 5
         Debris(
             self.game,
             player_x,
