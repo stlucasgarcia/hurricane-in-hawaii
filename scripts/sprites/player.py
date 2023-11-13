@@ -128,3 +128,5 @@ class Player(pygame.sprite.Sprite):
                     self.game.channels["player_run"].unpause()
                 elif action == "idle":
                     self.game.channels["player_run"].pause()
+            else:
+                self.game.channels["player_run"].pause()

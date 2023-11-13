@@ -4,21 +4,20 @@ import random
 from scripts.common.utils import State
 
 
-# Define debris class
 class Debris(pygame.sprite.Sprite):
-    def __init__(self, game, *groups):
+    def __init__(self, game, player_x, *groups):
         super().__init__(*groups)
-        self.groups_remove = groups
+        self.game = game
         self.image = game.assets["brick_box"]
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(320)
-        self.rect.y = -30  # Start above the screen
+        self.rect.x = random.randrange(player_x - 50, player_x + 100)
+        self.rect.y = -30
+        self.velocity = random.randrange(1, 3)
 
     def update(self, **kwargs: dict[str, pygame.sprite.Group]):
-        self.rect.y += 3  # Adjust falling speed
-        if self.rect.y > 240:
-            self.rect.y = -30
-            self.rect.x = random.randrange(320)
+        self.rect.y += self.velocity
+        if self.rect.y > 300:
+            self.kill()
 
         self.check_collision_y(kwargs["platforms"], kwargs["players"])
 
@@ -36,5 +35,5 @@ class Debris(pygame.sprite.Sprite):
         for hit in hits:
             if self.rect.y > 0:
                 hit.is_alive = False
-                hit.game.set_state(State.GAME_OVER)
+                self.game.set_state(State.GAME_OVER)
                 self.kill()

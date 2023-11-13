@@ -46,10 +46,15 @@ class AwareLevel:
         self.ambient_music = self.game.sounds["ambient/runaway"]
         self.ambient_music.set_volume(0.1)
 
-        for _ in range(10):  # Adjust the number of debris
-            Debris(
-                game, [self.sprite_groups["all_sprites"], self.sprite_groups["debris"]]
-            )
+        self.falling_debris_timer = 60
+
+    def generate_debris(self, player_x):
+        self.points += 1
+        Debris(
+            self.game,
+            player_x,
+            [self.sprite_groups["all_sprites"], self.sprite_groups["debris"]],
+        )
 
     def handle_events(self, event: pygame.event.Event):
         if event.type == pygame.KEYDOWN:
@@ -77,6 +82,10 @@ class AwareLevel:
         if self.game.is_running():
             self.sprite_groups["all_sprites"].update(**self.sprite_groups)
 
+            self.falling_debris_timer += 1
+            if self.falling_debris_timer % 60 == 0:
+                self.generate_debris(self.player.rect.x)
+
         for sprite in self.sprite_groups["all_sprites"]:
             animation_offset = (0, 0)
 
@@ -90,13 +99,5 @@ class AwareLevel:
                     sprite.rect.y - render_scroll[1] + animation_offset[1],
                 ),
             )
-
-        # # Check for collisions (you can add more logic here)
-        # collisions = pygame.sprite.spritecollide(self.debris, self.debris, False)
-        # for debris in collisions:
-        #     debris.rect.y = -30
-        #     debris.rect.x = random.randrange(320)
-
-        self.points = 1
 
         self.helper.update(self.sprite_groups["platforms"])
