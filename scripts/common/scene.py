@@ -52,7 +52,7 @@ class Scene:
             self.create_level("final")
         elif self.current_level.name == "final":
             self.current_level.is_completed = True
-            self.current_level.points += 50000
+            self.current_level.points += 500
             self.game.set_state(State.LEADERBOARD)
 
     def get_points(self):
