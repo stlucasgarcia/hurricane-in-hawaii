@@ -192,3 +192,123 @@ class GameOverMenu(Menu):
             if event.key == pygame.K_SPACE:
                 self.play_menu_select_sound()
                 self.game.set_state(State.START)
+
+
+class InstructionRunawayMenu(Menu):
+    def __init__(self, game) -> None:
+        super().__init__(game)
+
+        self.title_font = load_font(30)
+        self.show_subtitle = True
+        self.small_font = load_font(20)
+
+        self.font_fade = pygame.USEREVENT + 1
+        pygame.time.set_timer(self.font_fade, 800)
+
+    def render(self) -> None:
+        menu_text = self.title_font.render("Instruções", False, (139, 0, 0))
+        tip_text = self.small_font.render(
+            "Mantenha-se calmo e encontre uma rota de fuga", False, (0, 0, 0)
+        )
+        tip_time_text = self.small_font.render("Cuidado com o tempo!", False, (0, 0, 0))
+        subtitle_text = self.font.render("Press space to continue", False, (0, 0, 0))
+
+        # Draw a silver filter
+        silver_filter = pygame.Surface(
+            (self.display_width, self.display_height),
+            pygame.SRCALPHA,
+        )
+        silver_filter.fill(LIGHT_SILVER)
+        self.display.blit(silver_filter, (0, 0))
+
+        self.display.blit(menu_text, (self.display_width // 2 - 60, 15))
+        self.display.blit(tip_text, (self.display_width // 2 - 150, 60))
+        self.display.blit(tip_time_text, (self.display_width // 2 - 150, 80))
+
+        # make it blink
+        if self.show_subtitle:
+            self.display.blit(subtitle_text, (self.display_width // 2 - 125, 180))
+
+    def handle_events(self, event: pygame.event.Event) -> None:
+        if event.type == self.font_fade:
+            self.show_subtitle = not self.show_subtitle
+
+
+class InstructionAwareMenu(Menu):
+    def __init__(self, game) -> None:
+        super().__init__(game)
+
+        self.title_font = load_font(30)
+        self.show_subtitle = True
+        self.small_font = load_font(20)
+
+        self.font_fade = pygame.USEREVENT + 1
+        pygame.time.set_timer(self.font_fade, 800)
+
+    def render(self) -> None:
+        menu_text = self.title_font.render("Instruções", False, (139, 0, 0))
+        tip_text = self.small_font.render(
+            "Preste atenção ao seu redor", False, (0, 0, 0)
+        )
+        tip_time_text = self.small_font.render(
+            "Cuidado com objetos caindo!", False, (0, 0, 0)
+        )
+        subtitle_text = self.font.render("Press space to continue", False, (0, 0, 0))
+
+        # Draw a silver filter
+        silver_filter = pygame.Surface(
+            (self.display_width, self.display_height),
+            pygame.SRCALPHA,
+        )
+        silver_filter.fill(LIGHT_SILVER)
+        self.display.blit(silver_filter, (0, 0))
+
+        self.display.blit(menu_text, (self.display_width // 2 - 60, 15))
+        self.display.blit(tip_text, (self.display_width // 2 - 150, 60))
+        self.display.blit(tip_time_text, (self.display_width // 2 - 150, 80))
+
+        # make it blink
+        if self.show_subtitle:
+            self.display.blit(subtitle_text, (self.display_width // 2 - 125, 180))
+
+    def handle_events(self, event: pygame.event.Event) -> None:
+        if event.type == self.font_fade:
+            self.show_subtitle = not self.show_subtitle
+
+
+class InstructionFinalMenu(Menu):
+    def __init__(self, game) -> None:
+        super().__init__(game)
+
+        self.title_font = load_font(30)
+        self.show_subtitle = True
+        self.small_font = load_font(20)
+
+        self.font_fade = pygame.USEREVENT + 1
+        pygame.time.set_timer(self.font_fade, 800)
+
+    def render(self) -> None:
+        menu_text = self.title_font.render("Instruções", False, (139, 0, 0))
+        tip_text = self.small_font.render("Corra e procure abrigo", False, (0, 0, 0))
+        tip_time_text = self.small_font.render("Fuja do terremoto!", False, (0, 0, 0))
+        subtitle_text = self.font.render("Press space to continue", False, (0, 0, 0))
+
+        # Draw a silver filter
+        silver_filter = pygame.Surface(
+            (self.display_width, self.display_height),
+            pygame.SRCALPHA,
+        )
+        silver_filter.fill(LIGHT_SILVER)
+        self.display.blit(silver_filter, (0, 0))
+
+        self.display.blit(menu_text, (self.display_width // 2 - 60, 15))
+        self.display.blit(tip_text, (self.display_width // 2 - 150, 60))
+        self.display.blit(tip_time_text, (self.display_width // 2 - 150, 80))
+
+        # make it blink
+        if self.show_subtitle:
+            self.display.blit(subtitle_text, (self.display_width // 2 - 125, 180))
+
+    def handle_events(self, event: pygame.event.Event) -> None:
+        if event.type == self.font_fade:
+            self.show_subtitle = not self.show_subtitle
