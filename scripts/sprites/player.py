@@ -34,8 +34,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(
         self,
-        platforms_group: pygame.sprite.Group,
-        next_level_group: pygame.sprite.Group,
+        **kwargs: dict[str, pygame.sprite.Group],
     ):
         keys = pygame.key.get_pressed()
         self.velocity.x = 0
@@ -47,10 +46,10 @@ class Player(pygame.sprite.Sprite):
 
         self.velocity.y += GRAVITY
         self.rect.x += self.velocity.x
-        self.check_collision_x(platforms_group, next_level_group)
+        self.check_collision_x(kwargs["platforms"], kwargs["next"])
 
         self.rect.y += self.velocity.y
-        self.check_collision_y(platforms_group, next_level_group)
+        self.check_collision_y(kwargs["platforms"], kwargs["next"])
 
         if self.velocity.x > 0:
             self.flip = False

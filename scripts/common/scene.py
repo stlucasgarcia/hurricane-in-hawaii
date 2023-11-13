@@ -18,7 +18,7 @@ class Scene:
         self.levels = {
             "runaway": RunawayLevel(self.game),
             "aware": AwareLevel(self.game),
-            "final": "final",
+            "final": AwareLevel(self.game),
         }
 
         self.current_level = self.levels["runaway"]
@@ -27,17 +27,26 @@ class Scene:
         self.is_alive = True
 
     def create_level(self, level_name: str):
+        self.current_level.is_completed = True
+
         if level_name == "runaway":
-            return RunawayLevel(self.game)
+            self.levels["runaway"] = RunawayLevel(self.game)
+            self.current_level = self.levels["runaway"]
         elif level_name == "aware":
-            return AwareLevel(self.game)
+            self.levels["aware"] = AwareLevel(self.game)
+            self.current_level = self.levels["aware"]
+        elif level_name == "final":
+            self.levels["final"] = AwareLevel(self.game)
+            self.current_level = self.levels["final"]
 
     def next_level(self):
-        if self.current_level.name == "runaway":
-            self.current_level = self.create_level("aware")
-        if self.current_level.name == "aware":
-            self.current_level = self.create_level("final")
-        if self.current_level.name == "final":
+        if not self.current_level:
+            self.create_level("runaway")
+        elif self.current_level.name == "runaway":
+            self.create_level("aware")
+        elif self.current_level.name == "aware":
+            self.create_level("final")
+        elif self.current_level.name == "final":
             self.game.set_state(State.FINISHED)
 
     def get_points(self):
@@ -86,4 +95,4 @@ class Scene:
         self.game_over_menu.render(self.game.is_game_over(), self.get_points())
 
     def reset(self):
-        self.current_level = self.create_level("level_1")
+        self.create_level(self.current_level.name)

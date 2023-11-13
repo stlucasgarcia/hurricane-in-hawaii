@@ -1,18 +1,19 @@
 import pygame
 
 from scripts.sprites.clouds import Clouds
-from scripts.sprites.helper import RunawayHelper
+from scripts.sprites.debris import Debris
+from scripts.sprites.helper import AwareHelper
 from scripts.sprites.player import Player
 from scripts.common.tilemap import Tilemap
-from scripts.common.utils import State, load_font
+from scripts.common.utils import load_font
 
 TIME_LIMIT = 3 * 60  # 5 minutes in seconds
 JUMP_KEYS = [pygame.K_SPACE, pygame.K_UP, pygame.K_w]
 
 
-class RunawayLevel:
+class AwareLevel:
     def __init__(self, game) -> None:
-        self.name = "runaway"
+        self.name = "aware"
         self.game = game
 
         self.font = load_font(24)
@@ -22,20 +23,21 @@ class RunawayLevel:
             "platforms": pygame.sprite.Group(),
             "helpers": pygame.sprite.Group(),
             "next": pygame.sprite.Group(),
+            "players": pygame.sprite.Group(),
+            "debris": pygame.sprite.Group(),
         }
 
         self.clouds = Clouds(self.game.assets["clouds"], 10)
 
-        self.tilemap = Tilemap(
-            "./data/levels/runaway.tmx", **self.sprite_groups
-        ).render()
+        self.tilemap = Tilemap("./data/levels/aware.tmx", **self.sprite_groups).render()
         self.player = Player(
-            self.game, self.game.assets, self.sprite_groups["all_sprites"]
+            self.game,
+            self.game.assets,
+            [self.sprite_groups["all_sprites"], self.sprite_groups["players"]],
         )
         self.scroll = [0, 0]
 
-        self.start_time = pygame.time.get_ticks()
-        self.helper = RunawayHelper(
+        self.helper = AwareHelper(
             self.game, self.game.assets, self.sprite_groups["helpers"]
         )
         self.points = 0
@@ -43,6 +45,11 @@ class RunawayLevel:
 
         self.ambient_music = self.game.sounds["ambient/runaway"]
         self.ambient_music.set_volume(0.1)
+
+        for _ in range(10):  # Adjust the number of debris
+            Debris(
+                game, [self.sprite_groups["all_sprites"], self.sprite_groups["debris"]]
+            )
 
     def handle_events(self, event: pygame.event.Event):
         if event.type == pygame.KEYDOWN:
@@ -84,21 +91,12 @@ class RunawayLevel:
                 ),
             )
 
-        elapsed_time = (
-            pygame.time.get_ticks() - self.start_time
-        ) // 1000  # Convert to seconds
+        # # Check for collisions (you can add more logic here)
+        # collisions = pygame.sprite.spritecollide(self.debris, self.debris, False)
+        # for debris in collisions:
+        #     debris.rect.y = -30
+        #     debris.rect.x = random.randrange(320)
 
-        elapsed_time_text = self.font.render(
-            f"{TIME_LIMIT - elapsed_time}",
-            False,
-            (0, 0, 0),
-        )
-
-        self.points = TIME_LIMIT - elapsed_time
-
-        self.game.display.blit(elapsed_time_text, (145, 5))
+        self.points = 1
 
         self.helper.update(self.sprite_groups["platforms"])
-
-        if elapsed_time >= TIME_LIMIT:
-            self.game.set_state(State.GAME_OVER)

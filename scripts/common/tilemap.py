@@ -1,6 +1,7 @@
 import pygame
 
 from pytmx.util_pygame import load_pygame
+
 from scripts.common.tile import Tile
 
 
@@ -8,14 +9,12 @@ class Tilemap:
     def __init__(
         self,
         path: str,
-        all_sprites: pygame.sprite.Group,
-        platforms: pygame.sprite.Group,
-        next_level: pygame.sprite.Group,
+        **kwargs: dict[str, pygame.sprite.Group],
     ) -> None:
         self.game_map = load_pygame(path, pixelalpha=True)
-        self.all_sprites = all_sprites
-        self.platforms = platforms
-        self.next_level = next_level
+        self.all_sprites = kwargs["all_sprites"]
+        self.platforms = kwargs["platforms"]
+        self.next_level = kwargs["next"]
 
     def render(self) -> None:
         for layer in self.game_map.visible_layers:
