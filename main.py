@@ -1,7 +1,14 @@
 import pygame
 
 from scripts.common.scene import Scene
-from scripts.common.utils import Animation, State, load_image, load_images
+from scripts.common.utils import (
+    Animation,
+    MixerChannels,
+    State,
+    load_image,
+    load_images,
+    load_sound,
+)
 
 
 class Game:
@@ -17,6 +24,9 @@ class Game:
 
         self.clock = pygame.time.Clock()
 
+        pygame.mixer.set_num_channels(10)
+        self.sound_enabled = True
+
         self.assets = {
             "background": load_image("background.png"),
             "clouds": load_images("clouds"),
@@ -25,27 +35,86 @@ class Game:
             "player/jump": Animation(load_images("player/jump"), img_dur=1),
         }
 
+        self.sounds: dict[str, pygame.mixer.Sound] = {
+            "ui/select": load_sound("ui/select.wav"),
+            "ui/select_alternative": load_sound("ui/select_2.wav"),
+            "ui/game_over": load_sound("ui/game_over.wav"),
+            "ui/menu_in": load_sound("ui/menu_in.wav"),
+            "ui/menu_out": load_sound("ui/menu_out.wav"),
+            "player/jump": load_sound("player/jump.wav"),
+            "player/run": load_sound("player/run.wav"),
+            "ambient/runaway": load_sound("ambient/runaway.wav"),
+            "background/game": load_sound("background/game.mp3"),
+            "background/presentation": load_sound("background/presentation.mp3"),
+        }
+
+        self.channels = {
+            "background": pygame.mixer.Channel(MixerChannels.BACKGROUND),
+            "ambient": pygame.mixer.Channel(MixerChannels.AMBIENT),
+            "menu": pygame.mixer.Channel(MixerChannels.MENU),
+            "player": pygame.mixer.Channel(MixerChannels.PLAYER),
+            "player_run": pygame.mixer.Channel(MixerChannels.PLAYER_RUN),
+        }
+        self.channels["background"].set_volume(0.3)
+        self.channels["background"].play(
+            self.sounds["background/presentation"], loops=-1
+        )
+
         self.scene = Scene(self)
 
         self.state = State.START
 
+    def play_state_sound(self, channel, sound_name: str):
+        if not self.sound_enabled:
+            return
+
+        channel.play(self.sounds[sound_name])
+
     def set_state(self, state: State):
         if state == State.PAUSED:
             if self.state == State.RUNNING:
+                self.play_state_sound(self.channels["menu"], "ui/menu_in")
+                self.channels["player_run"].pause()
                 self.state = state
 
             elif self.state == State.PAUSED:
+                self.play_state_sound(self.channels["menu"], "ui/menu_out")
+                self.channels["player_run"].unpause()
                 self.state = State.RUNNING
 
         elif state == State.START:
             self.scene = Scene(self)
             self.state = state
+            self.play_state_sound(
+                self.channels["background"], "background/presentation"
+            )
 
         elif state == State.GAME_OVER:
+            self.channels["menu"].set_volume(1)
+            self.play_state_sound(self.channels["menu"], "ui/game_over")
             self.state = state
+
+        elif state == State.RUNNING:
+            self.state = state
+            self.play_state_sound(self.channels["background"], "background/game")
+
+        elif state == State.NEXT_LEVEL:
+            self.scene.next_level()
+            self.state = State.RUNNING
 
         else:
             self.state = state
+
+    def toggle_sound_enabled(self):
+        self.sound_enabled = not self.sound_enabled
+
+        if not self.sound_enabled:
+            for channel in self.channels.values():
+                channel.pause()
+
+        else:
+            for channel in self.channels.values():
+                channel.unpause()
 
     def is_paused(self) -> bool:
         return self.state == State.PAUSED

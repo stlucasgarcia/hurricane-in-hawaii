@@ -46,6 +46,7 @@ class LevelHelper(Helper):
 class RunawayLevel:
     def __init__(self, game) -> None:
         self.game = game
+        self.name = "runaway"
 
         self.font = load_font(24)
 
@@ -57,7 +58,7 @@ class RunawayLevel:
         self.clouds = Clouds(self.game.assets["clouds"], 10)
 
         self.tilemap = Tilemap(
-            "./data/levels/0.tmx", self.all_sprites, self.platforms, self.next
+            "./data/levels/runaway.tmx", self.all_sprites, self.platforms, self.next
         ).render()
         self.player = Player(self.game, self.game.assets, self.all_sprites)
         self.scroll = [0, 0]
@@ -65,7 +66,10 @@ class RunawayLevel:
         self.start_time = pygame.time.get_ticks()
         self.helper = LevelHelper(self.game, self.game.assets, self.helpers)
         self.points = 0
-        self.has_finished = False
+        self.is_completed = False
+
+        self.ambient_music = self.game.sounds["ambient/runaway"]
+        self.ambient_music.set_volume(0.1)
 
     def handle_events(self, event: pygame.event.Event):
         if event.type == pygame.KEYDOWN:
