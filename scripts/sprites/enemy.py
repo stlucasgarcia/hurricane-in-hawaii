@@ -116,6 +116,7 @@ class Enemy(pygame.sprite.Sprite):
                     self.game.channels["enemy_run"].pause()
                 elif action == "attack":
                     self.game.channels["enemy_run"].pause()
+                    self.game.channels["enemy"].set_volume(0.4)
                     self.game.channels["enemy"].play(sound)
             else:
                 self.game.channels["enemy_run"].pause()
