@@ -1,3 +1,4 @@
+import sys
 import pygame
 
 from scripts.common.scene import Scene
@@ -26,6 +27,7 @@ class Game:
 
         self.clock = pygame.time.Clock()
 
+        pygame.mixer.init()
         pygame.mixer.set_num_channels(10)
         self.sound_enabled = True
 
@@ -168,6 +170,9 @@ class Game:
             for channel in self.channels.values():
                 channel.unpause()
 
+            self.channels["player_run"].pause()
+            self.channels["enemy_run"].pause()
+
     def is_paused(self) -> bool:
         return self.state == State.PAUSED
 
@@ -200,7 +205,7 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    exit()
+                    sys.exit()
 
                 self.scene.handle_events(event)
 

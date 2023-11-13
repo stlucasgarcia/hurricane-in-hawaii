@@ -4,12 +4,12 @@ version = "0.1.0"
 description = ""
 authors = ["Lucas Garcia <lsglucas@protonmail.com>"]
 readme = "README.md"
-packages = [{include = "py_game"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<3.13"
 pygame-ce = "^2.3.2"
 pytmx = "^3.32"
+pyinstaller = "^6.2.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.9.1"

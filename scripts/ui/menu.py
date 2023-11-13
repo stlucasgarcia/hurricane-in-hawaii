@@ -1,3 +1,4 @@
+import sys
 import pygame
 from random import randint
 
@@ -98,7 +99,7 @@ class PauseMenu(Menu):
             if event.key == pygame.K_q:
                 self.play_game_over_sound()
                 pygame.quit()
-                exit()
+                sys.exit()
             if event.key == pygame.K_f:
                 self.play_menu_select_sound()
                 self.game.toggle_fullscreen()
