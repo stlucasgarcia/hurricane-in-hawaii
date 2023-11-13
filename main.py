@@ -34,6 +34,9 @@ class Game:
             "player/run": Animation(load_images("player/run"), img_dur=8),
             "player/jump": Animation(load_images("player/jump"), img_dur=1),
             "brick_box": load_image("objects/brick_box.png"),
+            "enemy/idle": Animation(load_images("enemy/idle"), img_dur=60),
+            "enemy/run": Animation(load_images("enemy/run"), img_dur=8),
+            "enemy/attack": Animation(load_images("enemy/attack"), img_dur=1),
         }
 
         self.sounds: dict[str, pygame.mixer.Sound] = {

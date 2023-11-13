@@ -1,5 +1,7 @@
 import pygame
+
 from scripts.levels.aware import AwareLevel
+from scripts.levels.final import FinalLevel
 
 from scripts.levels.runaway import RunawayLevel
 from scripts.ui.menu import GameOverMenu, PauseMenu, StartMenu
@@ -18,7 +20,7 @@ class Scene:
         self.levels = {
             "runaway": RunawayLevel(self.game),
             "aware": AwareLevel(self.game),
-            "final": AwareLevel(self.game),
+            "final": FinalLevel(self.game),
         }
 
         self.current_level = self.levels["runaway"]
@@ -27,7 +29,8 @@ class Scene:
         self.is_alive = True
 
     def create_level(self, level_name: str):
-        self.current_level.is_completed = True
+        if self.current_level.name != level_name:
+            self.current_level.is_completed = True
 
         if level_name == "runaway":
             self.levels["runaway"] = RunawayLevel(self.game)
@@ -36,7 +39,7 @@ class Scene:
             self.levels["aware"] = AwareLevel(self.game)
             self.current_level = self.levels["aware"]
         elif level_name == "final":
-            self.levels["final"] = AwareLevel(self.game)
+            self.levels["final"] = FinalLevel(self.game)
             self.current_level = self.levels["final"]
 
     def next_level(self):
