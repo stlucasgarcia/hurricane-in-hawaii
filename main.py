@@ -53,6 +53,8 @@ class Game:
             "ambient/runaway": load_sound("ambient/runaway.wav"),
             "background/game": load_sound("background/game.mp3"),
             "background/presentation": load_sound("background/presentation.mp3"),
+            "enemy/attack": load_sound("enemy/attack.wav"),
+            "enemy/run": load_sound("enemy/run.wav"),
         }
 
         self.channels = {
@@ -61,6 +63,8 @@ class Game:
             "menu": pygame.mixer.Channel(MixerChannels.MENU),
             "player": pygame.mixer.Channel(MixerChannels.PLAYER),
             "player_run": pygame.mixer.Channel(MixerChannels.PLAYER_RUN),
+            "enemy": pygame.mixer.Channel(MixerChannels.ENEMY),
+            "enemy_run": pygame.mixer.Channel(MixerChannels.ENEMY_RUN),
         }
         self.channels["background"].set_volume(0.3)
         self.channels["background"].play(

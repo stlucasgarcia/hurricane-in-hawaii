@@ -68,3 +68,5 @@ class MixerChannels(int, Enum):
     MENU = 2
     PLAYER = 3
     PLAYER_RUN = 4
+    ENEMY = 5
+    ENEMY_RUN = 6

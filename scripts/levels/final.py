@@ -2,7 +2,8 @@ import pygame
 
 from scripts.sprites.clouds import Clouds
 from scripts.sprites.debris import Debris
-from scripts.sprites.helper import AwareHelper
+from scripts.sprites.enemy import Enemy
+from scripts.sprites.helper import FinalHelper
 from scripts.sprites.player import Player
 from scripts.common.tilemap import Tilemap
 from scripts.common.utils import load_font
@@ -24,6 +25,7 @@ class FinalLevel:
             "helpers": pygame.sprite.Group(),
             "next": pygame.sprite.Group(),
             "players": pygame.sprite.Group(),
+            "enemies": pygame.sprite.Group(),
             "debris": pygame.sprite.Group(),
         }
 
@@ -34,10 +36,16 @@ class FinalLevel:
             self.game,
             self.game.assets,
             [self.sprite_groups["all_sprites"], self.sprite_groups["players"]],
+            player_speed=2,
+        )
+        self.enemy = Enemy(
+            self.game,
+            self.game.assets,
+            [self.sprite_groups["all_sprites"], self.sprite_groups["enemies"]],
         )
         self.scroll = [0, 0]
 
-        self.helper = AwareHelper(
+        self.helper = FinalHelper(
             self.game, self.game.assets, self.sprite_groups["helpers"]
         )
         self.points = 0

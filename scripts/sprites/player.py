@@ -31,6 +31,8 @@ class Player(pygame.sprite.Sprite):
         self.game.channels["player_run"].play(self.sounds["player/run"], loops=-1)
         self.game.channels["player_run"].pause()
 
+        self.health = 100
+
         self.set_action("idle")
 
     def update(
@@ -131,3 +133,10 @@ class Player(pygame.sprite.Sprite):
                     self.game.channels["player_run"].pause()
             else:
                 self.game.channels["player_run"].pause()
+
+    def hit(self):
+        self.health -= 20
+
+        if self.health <= 0:
+            self.is_alive = False
+            self.game.set_state(State.GAME_OVER)
