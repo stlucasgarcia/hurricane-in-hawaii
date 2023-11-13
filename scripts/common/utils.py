@@ -58,6 +58,7 @@ class State(str, Enum):
     RUNNING = "running"
     NEXT_LEVEL = "next_level"
     GAME_OVER = "game_over"
+    FINISHED = "finished"
     LEADERBOARD = "leaderboard"
 
 

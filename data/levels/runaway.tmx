@@ -79,7 +79,6 @@
   <object id="65" gid="75" x="400" y="96" width="48" height="48"/>
   <object id="66" gid="75" x="512" y="144" width="48" height="48"/>
   <object id="67" gid="75" x="1424" y="16" width="48" height="48"/>
-  <object id="69" gid="75" x="2496" y="144" width="48" height="48"/>
   <object id="70" gid="77" x="2096" y="192" width="32" height="48"/>
   <object id="71" gid="77" x="1936" y="112" width="32" height="48"/>
   <object id="72" gid="78" x="1968" y="112" width="16" height="16"/>
@@ -91,7 +90,6 @@
   <object id="78" gid="78" x="752" y="208" width="16" height="16"/>
   <object id="79" gid="75" x="1792" y="64" width="48" height="48"/>
   <object id="80" gid="73" x="2352" y="48" width="48" height="48"/>
-  <object id="82" gid="73" x="2432" y="144" width="48" height="48"/>
   <object id="83" gid="73" x="1536" y="48" width="48" height="48"/>
   <object id="84" gid="73" x="1200" y="48" width="48" height="48"/>
   <object id="85" gid="73" x="400" y="208" width="48" height="48"/>

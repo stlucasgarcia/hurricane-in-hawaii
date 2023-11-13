@@ -74,10 +74,12 @@ class Game:
         if state == State.PAUSED:
             if self.state == State.RUNNING:
                 self.play_state_sound(self.channels["menu"], "ui/menu_in")
+                self.channels["player_run"].pause()
                 self.state = state
 
             elif self.state == State.PAUSED:
                 self.play_state_sound(self.channels["menu"], "ui/menu_out")
+                self.channels["player_run"].unpause()
                 self.state = State.RUNNING
 
         elif state == State.START:
@@ -88,12 +90,18 @@ class Game:
             )
 
         elif state == State.GAME_OVER:
+            self.channels["menu"].set_volume(1)
             self.play_state_sound(self.channels["menu"], "ui/game_over")
             self.state = state
 
         elif state == State.RUNNING:
             self.state = state
             self.play_state_sound(self.channels["background"], "background/game")
+
+        elif state == State.NEXT_LEVEL:
+            self.scene.next_level()
+            self.state = State.RUNNING
+
         else:
             self.state = state
 

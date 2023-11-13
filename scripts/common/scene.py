@@ -1,4 +1,5 @@
 import pygame
+from scripts.levels.aware import AwareLevel
 
 from scripts.levels.runaway import RunawayLevel
 from scripts.ui.menu import GameOverMenu, PauseMenu, StartMenu
@@ -15,17 +16,29 @@ class Scene:
         self.game_over_menu = GameOverMenu(game)
 
         self.levels = {
-            "level_1": RunawayLevel(self.game),
+            "runaway": RunawayLevel(self.game),
+            "aware": AwareLevel(self.game),
+            "final": "final",
         }
 
-        self.current_level = self.levels["level_1"]
+        self.current_level = self.levels["runaway"]
         self.channel = game.channels["ambient"]
 
         self.is_alive = True
 
     def create_level(self, level_name: str):
-        if level_name == "level_1":
+        if level_name == "runaway":
             return RunawayLevel(self.game)
+        elif level_name == "aware":
+            return AwareLevel(self.game)
+
+    def next_level(self):
+        if self.current_level.name == "runaway":
+            self.current_level = self.create_level("aware")
+        if self.current_level.name == "aware":
+            self.current_level = self.create_level("final")
+        if self.current_level.name == "final":
+            self.game.set_state(State.FINISHED)
 
     def get_points(self):
         points = 0
