@@ -98,14 +98,15 @@ class Game:
 
         for item in self.leaderboard["players"]:
             if item["name"] == self.player_data["name"]:
-                item["score"] = self.player_data["score"]
+                if item["score"] < self.player_data["score"]:
+                    item["score"] = self.player_data["score"]
+
                 has_updated = True
                 break
 
         if not has_updated:
             self.leaderboard["players"].append(self.player_data)
 
-        print(self.leaderboard)
         save_data(self.leaderboard)
 
     def set_state(self, state: State):
